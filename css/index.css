@@ -1,0 +1,140 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+}
+
+a {
+  color: inherit;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+.container {
+  /* border: 1px solid; */
+  width: 900px;
+  margin: 50px auto;
+  color: #08237a;
+}
+
+.search {
+  display: flex;
+  flex-direction: row-reverse;
+  padding-right: 10px;
+}
+
+.titlecontainer {
+  border-bottom: 2px solid #08237a;
+  margin: 10px 0px;
+  padding-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 10px;
+}
+
+.hot {
+  height: 40px;
+  line-height: 40px;
+}
+
+.hot a {
+  display: inline-block;
+  padding: 0px 5px;
+}
+
+.stockInfo {
+  display: block;
+}
+
+.title h1 {
+  display: inline;
+  margin-right: 10px;
+}
+
+.price {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 0;
+}
+
+.priceLeft {
+  width: 230px;
+  padding-right: 10px;
+  border-right: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+}
+
+.priceLeft h1 {
+  padding-left: 0px;
+}
+
+.priceLeft i {
+  font-size: 30px;
+}
+
+.zdf {
+  text-align: center;
+  padding-left: 10px;
+}
+
+.zdf span {
+  display: block;
+}
+
+.priceItem {
+  width: 670px;
+  padding-left: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  /* background: lightblue; */
+  column-gap: 5px; /* 列间隙*/
+  row-gap: 5px; /* 行间隙*/
+  justify-items: left;
+  align-items: end;
+}
+
+.content {
+  display: flex;
+}
+
+.trendImg {
+  margin-left: 0px;
+}
+
+.trend {
+  width: 650px;
+  height: 500px;
+  background: #eee;
+}
+
+.order {
+  padding: 0 20px;
+}
+
+.orderList {
+  width: 220px;
+  height: 150px;
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: left;
+  align-items: start;
+}
+
+.sells {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.buys {
+  margin-top: 10px;
+}

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行情展示练习</title>
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_3448847_iaowboi3sbl.css">
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="search">
+            <form>
+                <input id="code" type="text" maxlength="6" placeholder="请输入6位股票代码">
+                <label>
+                    <input type="radio" name="marketid" checked value="0">
+                    <span>沪市</span>
+                </label>
+                <label>
+                    <input type="radio" name="marketid" value="1">
+                    <span>深市</span>
+                </label>
+                <!-- <input type="radio" name="market" id="sh" checked>
+                <label for="sh">沪市</label>
+                <input type="radio" name="market" id="sz">
+                <label for="sh">深市</label> -->
+                <button>查询行情</button>
+            </form>
+
+        </div>
+
+
+
+
+        <div class="stockInfo">
+            <div class="titlecontainer">
+                <div class="title">
+                    <h1>正在加载中……</h1>
+                    <!-- <h1>宁德时代</h1><span>(300750.SZ)</span> -->
+
+                </div>
+                <div class="hot">
+                    <span>热门股票：</span>
+                    <a href="#" data-code="399006" data-id="1">创业板指</a>
+                    <a href="#" data-code="300750" data-id="1">宁德时代</a>
+                    <a href="#" data-code="600048" data-id="0">保利地产</a>
+                    <a href="#" data-code="600000" data-id="0">浦发银行</a>
+                </div>
+
+            </div>
+
+            <div class="price">
+                <div class="priceLeft">
+                    <!-- <h1>436.80
+                        <i class="iconfont icon-xiangshang"></i>
+                    </h1>
+                    <div class="zdf">
+                        <span>11.77</span>
+                        <span>+2.77%</span>
+                    </div> -->
+
+                </div>
+
+                <ul class="priceItem">
+                    <!-- <li>今开：422.78</li>
+                    <li>最高：443.78</li>
+                    <li>最低：421.01</li>
+                    <li>昨收：425.03</li>
+                    <li>成交量:17.45万手</li>
+                    <li>成交额：76.41亿元</li>
+                    <li>换手率：0.86%</li>
+                    <li>市盈率：65.81</li> -->
+                </ul>
+            </div>
+        </div>
+        <div class="content">
+            <div class="trendImg">
+                <div class="trend">走势图</div>
+                <!-- <div class="k">K线图</div> -->
+            </div>
+            <div class="order">
+                <h2>五档盘口</h2>
+                <div class="orderList sells">
+                    <!-- <span>卖五</span><span>436.92</span><span>1</span>
+                    <span>卖四</span><span>436.92</span><span>1</span>
+                    <span>卖三</span><span>436.92</span><span>1</span>
+                    <span>卖二</span><span>436.92</span><span>1</span>
+                    <span>卖一</span><span>436.92</span><span>1</span> -->
+
+                </div>
+                <div class="orderList buys">
+                    <!-- <span>买一</span><span>436.92</span><span>1</span>
+                    <span>买二</span><span>436.92</span><span>1</span>
+                    <span>买三</span><span>436.92</span><span>1</span>
+                    <span>买四</span><span>436.92</span><span>1</span>
+                    <span>买五</span><span>436.92</span><span>1</span> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.1.1/echarts.min.js"></script>
+    <script src="./js/index.js"></script>
+</body>
+
+</html>
