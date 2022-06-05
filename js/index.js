@@ -5,8 +5,30 @@ const ins = axios.create({
   baseURL: "http://112.19.171.231:7080/quotescenter/services",
 });
 
-//初始化
+//初始化,默认显示行情
+
 let stockdata = [];
+let stockcode = "000001";
+let marketid = "0";
+(async function () {
+  stockdata = (await stock(marketid, stockcode))[0];
+  html(stockdata, marketid);
+  const trendDataArr = await getTrendData(marketid, stockcode);
+  picTrend(trendDataArr, stockdata.name, stockcode);
+})();
+
+//form表单事件注册
+$(".search").on("submit", async function (e) {
+  e.preventDefault();
+  stockcode = $("#code").val(); //得到搜索框输入的代码string
+  console.log(typeof stockcode);
+  marketid = $('.search input[name = "marketid"]:checked').val(); //选择的市场
+  stockdata = (await stock(marketid, stockcode))[0]; //得到股票行情信息数组第一项，是一个对象
+  const trendDataArr = await getTrendData(marketid, stockcode); //得到行情走势数据，是一个数组
+  $("#code").val(""); //搜索框点击查询后清空内容
+  html(stockdata, marketid); //更新页面信息
+  picTrend(trendDataArr, stockdata.name, stockcode);
+});
 
 //取行情快照的promise的函数
 async function stock(marketid, stockcode) {
@@ -14,7 +36,7 @@ async function stock(marketid, stockcode) {
     serviceid: "snapshot",
     body: {
       marketid,
-      stockcode: [`${stockcode}`],
+      stockcode: [stockcode],
     },
   });
 
@@ -33,26 +55,35 @@ async function stock(marketid, stockcode) {
   }
 }
 
-//初始化默认显示行情
-(async function () {
-  stockdata = (await stock("0", "000001"))[0];
-  html(stockdata, "0");
-  const trendDataArr = await getTrendData("0", "000001");
-  console.log(trendDataArr);
-  picTrend(trendDataArr, "上证指数", 000001);
-})();
+//获取分时走势图数据的函数
+async function getTrendData(marketid, stockcode) {
+  // console.log(stockcode);
+  const resp = await ins.post("", {
+    serviceid: "trenddata",
+    body: {
+      marketid,
+      stockcode: stockcode,
+      applysize: "-1",
+    },
+  });
 
-//form表单事件注册
-$(".search").on("submit", async function (e) {
-  e.preventDefault();
-  const stockcode = $("#code").val(); //搜索框输入的代码
-  const marketid = $('.search input[name = "marketid"]:checked').val(); //选择的市场
-  stockdata = (await stock(marketid, stockcode))[0]; //得到股票行情信息数组第一项，是一个对象
-  const trendDataArr = await getTrendData(marketid, stockcode); //得到行情走势数据，是一个数组
-  $("#code").val(""); //搜索框点击查询后清空内容
-  html(stockdata, marketid); //更新页面信息
-  picTrend(trendDataArr, stockdata.name, stockcode);
-});
+  // console.log(resp.data); // resp.data 为响应体的数据，axios会自动解析JSON格式
+  // console.log(resp.data.data);
+  if (resp.data.status !== 0) {
+    alert(`后台接口报错：${resp.data.message}`);
+    return;
+  }
+  if (resp.data.data.length === 0) {
+    alert("股票行情查询失败，请检查股票代码或市场");
+    console.log("查询失败，请检查股票代码或市场");
+    return;
+  } else {
+    // console.log(resp.data.data);
+    return resp.data.data; //返回股票行情数据的数组(Array)
+  }
+}
+
+// getTrendData("0", "600000");
 
 /**
  * 更新页面上的股票行情信息的函数
@@ -69,9 +100,7 @@ function html(stockdata, marketid) {
   }
   //设置title内容
   $(".title").html(
-    `<div><h1>${stockdata.name}</h1><span>(${stockdata.code}.${mk})</span></div>
-   
-     `
+    `<h1>${stockdata.name}</h1><span>(${stockdata.code}.${mk})</span>`
   );
 
   //设置最新价和涨跌幅
@@ -168,43 +197,14 @@ function html(stockdata, marketid) {
   $(".buys").html(buysHtml);
 }
 
-//获取分时走势图数据
-async function getTrendData(marketid, stockcode) {
-  const resp = await ins.post("", {
-    serviceid: "trenddata",
-    body: {
-      marketid,
-      stockcode: `${stockcode}`,
-      applysize: "-1",
-    },
-  });
-
-  // console.log(resp.data); // resp.data 为响应体的数据，axios会自动解析JSON格式
-  // console.log(resp.data.data);
-  if (resp.data.status !== 0) {
-    alert(`后台接口报错：${resp.data.message}`);
-    return;
-  }
-  if (resp.data.data.length === 0) {
-    alert("股票行情查询失败，请检查股票代码或市场");
-    console.log("查询失败，请检查股票代码或市场");
-    return;
-  } else {
-    console.log(resp.data.data);
-    return resp.data.data; //返回股票行情数据的数组(Array)
-  }
-}
-
-// getTrendData("0", 600000);
-
-// 图表1：折线图
+// 显示走势图的函数
 // console.log($(".trend")[0]);
 function picTrend(trendDataArr, name, stockcode) {
   const myChart = echarts.init($(".trend")[0], null, {
     // width: 1600,
     // height: 800,
   }); // 初始化，获得echart实例
-  console.log(trendDataArr.map((it) => `${it.time}`));
+  // console.log(trendDataArr.map((it) => `${it.time}`));
   // 给当前图表实例添加配置
   myChart.setOption({
     title: {
@@ -246,12 +246,42 @@ function picTrend(trendDataArr, name, stockcode) {
   });
 }
 
+//注册事件：热门股票链接
 $(".hot a").click(async function (e) {
   e.preventDefault();
-  console.log("click a");
-  console.log($(this).text());
+  // console.log("click a");
+  // console.log($(this).text());
   stockdata = (await stock(this.dataset.id, this.dataset.code))[0];
   html(stockdata, this.dataset.id);
   const trendDataArr = await getTrendData(this.dataset.id, this.dataset.code);
   picTrend(trendDataArr, $(this).text(), this.dataset.code);
+});
+
+//函数：从title获得marketid和stockcode，然后更新页面数据和走势图
+async function refresh() {
+  const stockcode = $(".title span").text().substring(1, 7);
+  let marketid = $(".title span").text().substring(8, 10);
+  if (marketid === "SH") {
+    marketid = "0";
+  }
+  if (marketid === "SZ") {
+    marketid = "1";
+  }
+  console.log(marketid, stockcode);
+  stockdata = (await stock(marketid, stockcode))[0];
+  html(stockdata, marketid);
+  const trendDataArr = await getTrendData(marketid, stockcode);
+  picTrend(trendDataArr, stockdata.name, stockcode);
+}
+
+//注册事件：处理刷新按钮
+$(".refresh").click(() => {
+  refresh();
+
+  //隔5秒自动刷新
+
+  setInterval(() => {
+    refresh();
+    console.log(123);
+  }, 5000);
 });
