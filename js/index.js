@@ -137,7 +137,7 @@ function html(stockdata, marketid) {
   let buysHtml;
   if (!stockdata.sells) {
     //如果是指数，没有买卖盘数据
-    sellsHtml = "指数代码没有买卖盘数据";
+    sellsHtml = "无数据";
     buysHtml = "";
   } else {
     sellsHtml = stockdata.sells
